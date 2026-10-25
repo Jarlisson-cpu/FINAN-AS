@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Minhas Finanças</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">💰 <span>Minhas Finanças</span></div>
+      <nav id="nav">
+        <button data-action="nav" data-view="dashboard">📊 <span>Painel</span></button>
+        <button data-action="nav" data-view="transactions">🧾 <span>Lançamentos</span></button>
+        <button data-action="nav" data-view="accounts">🏦 <span>Contas</span></button>
+        <button data-action="nav" data-view="budgets">🎯 <span>Orçamentos</span></button>
+        <button data-action="nav" data-view="goals">🏆 <span>Metas</span></button>
+        <button data-action="nav" data-view="recurring">🔁 <span>Fixos</span></button>
+        <button data-action="nav" data-view="categories">🏷️ <span>Categorias</span></button>
+        <button data-action="nav" data-view="reports">📈 <span>Relatórios</span></button>
+        <button data-action="nav" data-view="settings">⚙️ <span>Ajustes</span></button>
+      </nav>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div class="month-picker">
+          <button class="icon-btn" data-action="prevMonth" title="Mês anterior">‹</button>
+          <strong id="monthLabel"></strong>
+          <button class="icon-btn" data-action="nextMonth" title="Próximo mês">›</button>
+          <button class="btn sm ghost" data-action="thisMonth">Hoje</button>
+        </div>
+        <div class="top-actions">
+          <button class="icon-btn" data-action="toggleTheme" title="Alternar tema">🌓</button>
+          <button class="btn primary" data-action="newTx">+ Lançamento</button>
+        </div>
+      </header>
+      <section id="view"></section>
+    </main>
+  </div>
+
+  <div id="modal" class="modal" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true"><div id="modalBody"></div></div>
+  </div>
+  <div id="toast" class="toast"></div>
+  <input type="file" id="importFile" accept="application/json,.json" hidden>
+
+  <script src="app.js"></script>
+</body>
+</html>

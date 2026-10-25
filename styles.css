@@ -192,10 +192,11 @@ svg text { fill: var(--muted); font-size: 11px; }
 .modal { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 1rem; background: rgba(8, 12, 24, .5); }
 .modal-card { width: min(520px, 100%); max-height: calc(100vh - 2rem); overflow-y: auto; background: var(--surface); border-radius: 18px; padding: 1.4rem; box-shadow: 0 20px 60px rgba(0, 0, 0, .3); }
 .toast {
-  position: fixed; left: 50%; bottom: 1.5rem; z-index: 60; transform: translate(-50%, 150%); transition: transform .25s;
+  position: fixed; left: 50%; bottom: 1.5rem; z-index: 60; transform: translate(-50%, 150%); opacity: 0; visibility: hidden;
+  transition: transform .25s, opacity .25s, visibility .25s;
   background: var(--text); color: var(--bg); padding: .65rem 1.1rem; border-radius: 10px; font-weight: 500; pointer-events: none;
 }
-.toast.show { transform: translate(-50%, 0); }
+.toast.show { transform: translate(-50%, 0); opacity: 1; visibility: visible; }
 
 /* responsive */
 @media (max-width: 1100px) {

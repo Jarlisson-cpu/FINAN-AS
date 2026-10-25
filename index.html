@@ -2,8 +2,17 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Minhas Finanças</title>
+  <meta name="description" content="Controle de dinheiro, gastos, orçamentos e metas.">
+  <meta name="theme-color" content="#4f46e5">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Finanças">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -32,6 +41,7 @@
           <button class="btn sm ghost" data-action="thisMonth">Hoje</button>
         </div>
         <div class="top-actions">
+          <button class="btn sm" data-action="installApp" data-install hidden>📲 Instalar app</button>
           <button class="icon-btn" data-action="toggleTheme" title="Alternar tema">🌓</button>
           <button class="btn primary" data-action="newTx">+ Lançamento</button>
         </div>

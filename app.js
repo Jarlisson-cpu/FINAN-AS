@@ -463,6 +463,7 @@ function viewSettings() {
           <option value="light" ${t === 'light' ? 'selected' : ''}>Claro</option>
           <option value="dark" ${t === 'dark' ? 'selected' : ''}>Escuro</option></select></label></div>
       </div>
+      <div class="card"><h3>📲 Aplicativo</h3>${appCardHtml()}</div>
       <div class="card"><h3>Backup</h3>
         <p class="muted sm">Seus dados ficam salvos <strong>apenas neste navegador</strong>. Faça backup com frequência — principalmente antes de limpar o histórico do navegador.</p>
         <div class="card-actions"><button class="btn primary" data-action="exportJSON">⬇️ Baixar backup</button><button class="btn" data-action="importJSON">⬆️ Restaurar backup</button><button class="btn" data-action="exportCSVAll">⬇️ Todos os lançamentos (CSV)</button></div>
@@ -485,6 +486,35 @@ function viewSettings() {
     </div>
   </div>`;
 }
+
+/* ================= aplicativo (PWA) ================= */
+let installPrompt = null;
+const isStandalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent);
+
+function appCardHtml() {
+  if (isStandalone()) return `<p class="sm">✅ Você está usando o <strong>app instalado</strong>. Ele funciona mesmo sem internet.</p>`;
+  if (location.protocol === 'file:') return `<p class="muted sm">Para instalar como aplicativo, abra o sistema pelo atalho <strong>iniciar.bat</strong> (no computador) ou por um endereço https (no celular).</p>`;
+  if (installPrompt) return `<p class="muted sm">Instale para abrir pelo ícone, em janela própria e sem internet.</p>
+    <div class="card-actions"><button class="btn primary" data-action="installApp">📲 Instalar app</button></div>`;
+  if (isIOS()) return `<p class="muted sm">No iPhone/iPad (Safari): toque em <strong>Compartilhar</strong> <span aria-hidden="true">⬆️</span> e depois em <strong>Adicionar à Tela de Início</strong>.</p>`;
+  return `<p class="muted sm">Use o menu do navegador: <strong>Instalar app</strong> (Chrome/Edge, ícone ⊕ na barra de endereço) ou <strong>Adicionar à tela inicial</strong> (Android).</p>`;
+}
+function syncInstallButtons() {
+  document.querySelectorAll('[data-install]').forEach(b => { b.hidden = !installPrompt; });
+}
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  installPrompt = e;
+  syncInstallButtons();
+  if (ui.view === 'settings') render();
+});
+window.addEventListener('appinstalled', () => {
+  installPrompt = null;
+  syncInstallButtons();
+  toast('App instalado! 🎉');
+  if (ui.view === 'settings') render();
+});
 
 const VIEWS = { dashboard: viewDashboard, transactions: viewTransactions, accounts: viewAccounts, categories: viewCategories, budgets: viewBudgets, goals: viewGoals, recurring: viewRecurring, reports: viewReports, settings: viewSettings };
 
@@ -824,6 +854,13 @@ const actions = {
     applyTheme(); save(); render();
   },
   closeModal,
+  installApp: async () => {
+    if (!installPrompt) return;
+    installPrompt.prompt();
+    await installPrompt.userChoice;
+    installPrompt = null;
+    syncInstallButtons();
+  },
   pickEmoji: (d, el) => { el.closest('form').icon.value = d.emoji; },
 
   newTx: () => txForm(),
@@ -951,3 +988,14 @@ applyTheme();
 const created = generateRecurring();
 render();
 if (created) toast(`${created} lançamento(s) fixo(s) criado(s) para este mês`);
+
+// atalho "Novo lançamento" do ícone do app
+if (new URLSearchParams(location.search).has('novo')) {
+  history.replaceState(null, '', location.pathname + location.hash);
+  txForm();
+}
+if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+  navigator.serviceWorker.register('sw.js').catch(e => console.warn('Service worker não registrado', e));
+}
+// pede ao navegador para não apagar os dados quando faltar espaço
+navigator.storage?.persist?.().catch(() => {});

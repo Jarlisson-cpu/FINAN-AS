@@ -209,7 +209,9 @@ svg text { fill: var(--muted); font-size: 11px; }
   .sidebar {
     position: fixed; top: auto; bottom: 0; left: 0; right: 0; z-index: 20; height: auto; padding: .35rem;
     border-right: 0; border-top: 1px solid var(--border);
+    padding-bottom: calc(.35rem + env(safe-area-inset-bottom));
   }
+  .topbar { padding-top: calc(1rem + env(safe-area-inset-top)); }
   .brand { display: none; }
   #nav { flex-direction: row; overflow-x: auto; }
   #nav button { flex-direction: column; gap: 0; font-size: .7rem; padding: .35rem .6rem; flex: none; }
